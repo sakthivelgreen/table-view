@@ -157,16 +157,18 @@ thead {
     position: relative;
 }
 
+td {
+    height: 60px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+
 thead tr {
     position: sticky;
     top: 60px;
     height: 50px;
     z-index: 9;
-}
-
-th,
-td {
-    height: 60px;
     text-align: left;
     vertical-align: middle;
 }
