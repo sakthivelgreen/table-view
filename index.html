@@ -6,10 +6,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Table View</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+        integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="script.js" defer></script>
 </head>
 
 <body>
+    <div class="wrapper">
+        <div class="container">
+            <div class="tabs">
+                <div class="menu-left">
+                    <ul>
+                        <li id="tab-1" class="active">Leave Requests</li>
+                        <li id="tab-2">Leave Approvals</li>
+                    </ul>
+                </div>
+                <div class="menu-right">
+                    <div class="search-div">
+                        <i class="icon fa-solid fa-magnifying-glass"></i>
+                        <input type="search" id="search" placeholder="Search" />
+                    </div>
+                </div>
+            </div>
+            <div class="table-div">
+                <table id="myTable">
+                    <thead>
+                        <tr>
+                            <th class="col-input"><input type="checkbox" name="select-all" id="select-all" /></th>
+                            <th class="col-title">Employee</th>
+                            <th class="col-title">Leave Type</th>
+                            <th class="col-title">Date Requested</th>
+                            <th class="col-title">Duration</th>
+                            <th class="col-title">Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="row">
+                            <td class="col-input"><input type="checkbox" name="checkbox-1" id="checkbox-1" /></td>
+                            <td class="col-data"><span><img src="./static/60111.jpg" alt="profile-img">Robert
+                                    Fox</span></td>
+                            <td class="col-data">Annual Leave</td>
+                            <td class="col-data">Sep 12 - Sep 16, 2024</td>
+                            <td class="col-data">5 days</td>
+                            <td class="col-data"><span class="status" data-status="Pending">Pending</span></td>
+                            <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-input"><input type="checkbox" name="checkbox-2" id="checkbox-2" /></td>
+                            <td class="col-data"><span><img src="./static/60111.jpg" alt="profile-img">Arlene
+                                    McCoy</span></td>
+                            <td class="col-data">Sick Leave</td>
+                            <td class="col-data">Aug 2 - Aug 9, 2024</td>
+                            <td class="col-data">8 days</td>
+                            <td class="col-data"><span class="status" data-status="Pending">Pending</span></td>
+                            <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-input"><input type="checkbox" name="checkbox-3" id="checkbox-3" /></td>
+                            <td class="col-data"><span><img src="./static/60111.jpg" alt="profile-img">Brooklyn
+                                    Simmons</span></td>
+                            <td class="col-data">Annual Leave</td>
+                            <td class="col-data">April 18 - April 21, 2024</td>
+                            <td class="col-data">4 days</td>
+                            <td class="col-data"><span class="status" data-status="Pending">Pending</span></td>
+                            <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-input"><input type="checkbox" name="checkbox-4" id="checkbox-4" /></td>
+                            <td class="col-data"><span><img src="./static/60111.jpg" alt="profile-img">Darlene
+                                    Robertson</span></td>
+                            <td class="col-data">Annual Leave</td>
+                            <td class="col-data">April 1 - April 4, 2024</td>
+                            <td class="col-data">4 days</td>
+                            <td class="col-data"><span class="status" data-status="Approved">Approved</span></td>
+                            <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-input"><input type="checkbox" name="checkbox-5" id="checkbox-5" /></td>
+                            <td class="col-data"><span><img src="./static/60111.jpg" alt="profile-img">Jacob
+                                    Jones</span></td>
+                            <td class="col-data">Annual Leave</td>
+                            <td class="col-data">Mar 6 - Mar 7, 2024</td>
+                            <td class="col-data">2 days</td>
+                            <td class="col-data"><span class="status" data-status="Approved">Approved</span></td>
+                            <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-input"><input type="checkbox" name="checkbox-6" id="checkbox-6" /></td>
+                            <td class="col-data"><span><img src="./static/60111.jpg" alt="profile-img">Devon Lane</span>
+                            </td>
+                            <td class="col-data">Annual Leave</td>
+                            <td class="col-data">Feb 16 - Feb 18, 2024</td>
+                            <td class="col-data">3 days</td>
+                            <td class="col-data"><span class="status" data-status="Declined">Declined</span></td>
+                            <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-input"><input type="checkbox" name="checkbox-7" id="checkbox-7" /></td>
+                            <td class="col-data"><span><img src="./static/60111.jpg" alt="profile-img">Kathryn
+                                    Murphy</span></td>
+                            <td class="col-data">Sick Leave</td>
+                            <td class="col-data">Feb 1 - Feb 4, 2024</td>
+                            <td class="col-data">4 days</td>
+                            <td class="col-data"><span class="status" data-status="Pending">Pending</span></td>
+                            <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-input"><input type="checkbox" name="checkbox-8" id="checkbox-8" /></td>
+                            <td class="col-data"><span><img src="./static/60111.jpg" alt="profile-img">Ralph
+                                    Edwards</span></td>
+                            <td class="col-data">Paternity Leave</td>
+                            <td class="col-data">Dec 22 2023 - Jan 24, 2024</td>
+                            <td class="col-data">31 days</td>
+                            <td class="col-data"><span class="status" data-status="Approved">Approved</span></td>
+                            <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 </body>
 
