@@ -299,19 +299,55 @@ tr {
     transform: scale(4);
 }
 
-@media only screen and (min-width:600px) {}
+input[type='checkbox'] {
+    all: unset;
+    height: 15px;
+    width: 15px;
+    border: 1px solid var(--hover-text-color);
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
 
-@media only screen and (min-width:778px) {
+input[type='checkbox']:checked::before {
+    content: '\2714';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: var(--hover-text-color);
+}
+
+input[type='checkbox']:indeterminate::before {
+    content: '-';
+    position: absolute;
+    top: 45%;
+    left: 15%;
+    right: 15%;
+    height: 2px;
+    background-color: var(--hover-text-color);
+}
+
+@media only screen and (min-width:600px) {
     .wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
     }
+
+    .container {
+        width: 90%;
+    }
 }
 
-@media only screen and (min-width:992px) {}
-
-@media only screen and (min-width:1200px) {
+@media only screen and (min-width:778px) {
     .container {
         width: 80%;
         height: 80%;
