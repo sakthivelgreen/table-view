@@ -182,9 +182,7 @@ th:last-child {
     column-span: 1;
 }
 
-tr:hover {
-    background-color: var(--hover-color);
-}
+
 
 tr:hover .action>i {
     color: var(--text-color);
@@ -203,10 +201,6 @@ th:last-child {
     border-bottom-right-radius: 12px;
 }
 
-/* for first and second column sticky */
-tr {
-    position: relative;
-}
 
 
 td span {
@@ -224,11 +218,30 @@ td {
     background-color: var(--container-background);
 }
 
+tr:hover td {
+    background-color: var(--hover-color);
+}
+
 td span img {
     height: 35px;
     width: 35px;
     border-radius: 50%;
 }
+
+/* first two columns sticky*/
+tr {
+    position: relative;
+}
+
+.sticky {
+    position: sticky;
+}
+
+.sticky.col-input {
+    left: var(--overall-padding);
+    padding: var(--overall-padding)
+}
+
 
 .col-title,
 .col-data {
