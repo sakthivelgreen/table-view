@@ -252,6 +252,10 @@ function events() {
             searchByName(search.value);
         }
     })
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(item => {
+        item.addEventListener('change', checkBox)
+    })
 }
 
 
@@ -285,7 +289,7 @@ function freeze_columns() {
 }
 
 
-// search Using Name
+// Search using name
 function searchByName(search_string) {
     const Employee_td = document.querySelectorAll('.Employee-name');
     Employee_td.forEach(td => {
@@ -293,4 +297,24 @@ function searchByName(search_string) {
         let Employee_name = td.querySelector('.name').textContent;
         Employee_name.toLocaleLowerCase().includes(search_string.toLocaleLowerCase()) ? parent.style.display = 'table-row' : parent.style.display = 'none';
     })
+}
+
+// CheckBox 
+function checkBox(e) {
+    const select_all_checkBox = thead.querySelector('#select-all');
+    const allCheckbox = Array.from(tbody.querySelectorAll('input[type="checkbox"]'));
+    let checkedItems;
+    if (e.target.id === 'select-all') {
+        allCheckbox.forEach(item => {
+            item.checked = e.target.checked;
+        })
+    }
+    checkedItems = allCheckbox.filter(item => item.checked)
+    if (checkedItems.length > 0 && checkedItems.length < allCheckbox.length) {
+        select_all_checkBox.indeterminate = true;
+    }
+    if (checkedItems.length === allCheckbox.length) {
+        select_all_checkBox.indeterminate = false;
+        select_all_checkBox.checked = true;
+    }
 }
