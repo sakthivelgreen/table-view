@@ -5,6 +5,7 @@ const tbody = document.querySelector('tbody');
 
 const leave_requests = document.querySelector('#leave-requests');
 const leave_approved = document.querySelector('#leave-approved');
+const search = document.querySelector('#search');
 
 const data =
     [
@@ -193,11 +194,11 @@ function row(id, profile_img, name, leave_type, date, duration, status) {
     row.className = 'row';
     const html = `
     <td class="col-input sticky"><input type="checkbox"  id="${id}" /></td>
-    <td class="col-data sticky">
-        <span>
-            <img src="${profile_img}" alt="profile-img">
-            ${name}
-        </span>
+    <td class="col-data sticky Employee-name">
+    <span class='img'>
+        <img src="${profile_img}" alt="profile-img">
+    <span>
+        <span class='name'>${name}</span>
     </td>
     <td class="col-data">${leave_type}</td>
     <td class="col-data">${date}</td>
@@ -245,6 +246,12 @@ function events() {
         tbody.innerHTML = '';
         data_Insert(data);
     })
+
+    search.addEventListener('input', () => {
+        if (search.value !== '') {
+            searchByName(search.value);
+        }
+    })
 }
 
 
@@ -275,4 +282,15 @@ function freeze_columns() {
             }
         });
     });
+}
+
+
+// search Using Name
+function searchByName(search_string) {
+    const Employee_td = document.querySelectorAll('.Employee-name');
+    Employee_td.forEach(td => {
+        let parent = td.parentElement;
+        let Employee_name = td.querySelector('.name').textContent;
+        Employee_name.toLocaleLowerCase().includes(search_string.toLocaleLowerCase()) ? parent.style.display = 'table-row' : parent.style.display = 'none';
+    })
 }
