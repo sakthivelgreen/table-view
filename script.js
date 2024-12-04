@@ -1,35 +1,10 @@
-// for column freeze in Table
-document.addEventListener("DOMContentLoaded", function () {
-    const firstColumn = document.querySelectorAll('.sticky.col-input');
-    const secondColumn = document.querySelectorAll('.sticky.col-data');
-    const headerColumn = document.querySelector('.sticky.col-title');
-
-    if (firstColumn && secondColumn) {
-        firstColumn.forEach(item => { item.style.padding = '16px 30px' })
-        const firstStickyWidth = firstColumn[0].offsetWidth;
-        headerColumn.style.left = `${firstStickyWidth}px`;
-        secondColumn.forEach(item => { item.style.left = `${firstStickyWidth}px` });
-    }
-
-    const tableContainer = document.querySelector('.container');
-    const cells = document.querySelectorAll('td:not(.sticky), th:not(.sticky)');
-
-    tableContainer.addEventListener('scroll', () => {
-        cells.forEach(cell => {
-            const cellRect = cell.getBoundingClientRect();
-            if (cellRect.left - tableContainer.getBoundingClientRect().left <= 50) {
-                cell.style.opacity = 0;
-            } else {
-                cell.style.opacity = 1;
-            }
-        });
-    });
-});
-
 // Declarations
 const table = document.querySelector('table');
 const thead = document.querySelector('thead');
 const tbody = document.querySelector('tbody');
+
+const leave_requests = document.querySelector('#leave-requests');
+const leave_approved = document.querySelector('#leave-approved');
 
 const data =
     [
@@ -199,17 +174,20 @@ const data =
     ]
 
 function main() { // Logics Start here
-    data_Insert()
+    thead.appendChild(row_thead());
+    data_Insert(data);
+    events()
 }
 main() // function Call
 
-function data_Insert() {
-    thead.appendChild(row_thead());
-    data.forEach(item => {
+function data_Insert(obj) {
+    obj.forEach(item => {
         tbody.appendChild(row(item.id, item.img_src, item.name, item.leave_type, item.date, item.duration, item.status))
     });
+    freeze_columns();
 }
 
+// table structure
 function row(id, profile_img, name, leave_type, date, duration, status) {
     const row = document.createElement('tr');
     row.className = 'row';
@@ -249,4 +227,52 @@ function row_thead() {
     <th></th>`;
     row.innerHTML = html;
     return row;
+}
+
+// Events
+
+function events() {
+    leave_approved.addEventListener('click', (e) => {
+        leave_requests.classList.remove('active');
+        e.target.classList.add('active');
+        let status_approved = data.filter(item => item.status === 'Approved');
+        tbody.innerHTML = '';
+        data_Insert(status_approved);
+    })
+    leave_requests.addEventListener('click', (e) => {
+        leave_approved.classList.remove('active');
+        e.target.classList.add('active');
+        tbody.innerHTML = '';
+        data_Insert(data);
+    })
+}
+
+
+
+// for column freeze in Table
+function freeze_columns() {
+    const firstColumn = document.querySelectorAll('.sticky.col-input');
+    const secondColumn = document.querySelectorAll('.sticky.col-data');
+    const headerColumn = document.querySelector('.sticky.col-title');
+
+    if (firstColumn && secondColumn) {
+        firstColumn.forEach(item => { item.style.padding = '16px 30px' })
+        const firstStickyWidth = firstColumn[0].offsetWidth;
+        headerColumn.style.left = `${firstStickyWidth}px`;
+        secondColumn.forEach(item => { item.style.left = `${firstStickyWidth}px` });
+    }
+
+    const tableContainer = document.querySelector('.container');
+    const cells = document.querySelectorAll('td:not(.sticky), th:not(.sticky)');
+
+    tableContainer.addEventListener('scroll', () => {
+        cells.forEach(cell => {
+            const cellRect = cell.getBoundingClientRect();
+            if (cellRect.left - tableContainer.getBoundingClientRect().left <= 50) {
+                cell.style.opacity = 0;
+            } else {
+                cell.style.opacity = 1;
+            }
+        });
+    });
 }
