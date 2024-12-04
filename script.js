@@ -186,14 +186,17 @@ function data_Insert(obj) {
         tbody.appendChild(row(item.id, item.img_src, item.name, item.leave_type, item.date, item.duration, item.status))
     });
     freeze_columns();
+    Action_Event()
+    checkbox_Event()
 }
 
 // table structure
 function row(id, profile_img, name, leave_type, date, duration, status) {
     const row = document.createElement('tr');
     row.className = 'row';
+    row.id = id;
     const html = `
-    <td class="col-input sticky"><input type="checkbox"  id="${id}" /></td>
+    <td class="col-input sticky" ><input type="checkbox" /></td>
     <td class="col-data sticky Employee-name">
     <span class='img'>
         <img src="${profile_img}" alt="profile-img">
@@ -208,7 +211,9 @@ function row(id, profile_img, name, leave_type, date, duration, status) {
             ${status}
         </span>
     </td>
-    <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+    <td class="action">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+    </td>
     `
     row.innerHTML = html;
     return row;
@@ -239,6 +244,7 @@ function events() {
         let status_approved = data.filter(item => item.status === 'Approved');
         tbody.innerHTML = '';
         data_Insert(status_approved);
+
     })
     leave_requests.addEventListener('click', (e) => {
         leave_approved.classList.remove('active');
@@ -248,16 +254,23 @@ function events() {
     })
 
     search.addEventListener('input', () => {
-        if (search.value !== '') {
+        if (search.value.trim() !== '') {
             searchByName(search.value);
+        }
+        if (search.value.trim() === '') {
+            tbody.innerHTML = '';
+            data_Insert(data);
         }
     })
 
+    // checkbox_Event()
+    // Action_Event()
+}
+function checkbox_Event() {
     document.querySelectorAll('input[type="checkbox"]').forEach(item => {
         item.addEventListener('change', checkBox)
     })
 }
-
 
 
 // for column freeze in Table
@@ -293,9 +306,9 @@ function freeze_columns() {
 function searchByName(search_string) {
     const Employee_td = document.querySelectorAll('.Employee-name');
     Employee_td.forEach(td => {
-        let parent = td.parentElement;
-        let Employee_name = td.querySelector('.name').textContent;
-        Employee_name.toLocaleLowerCase().includes(search_string.toLocaleLowerCase()) ? parent.style.display = 'table-row' : parent.style.display = 'none';
+        tbody.innerHTML = '';
+        let Emp_details = data.filter(item => item.name.trim().toLocaleLowerCase().includes(search_string.trim().toLocaleLowerCase()))
+        data_Insert(Emp_details);
     })
 }
 
@@ -312,9 +325,100 @@ function checkBox(e) {
     checkedItems = allCheckbox.filter(item => item.checked)
     if (checkedItems.length > 0 && checkedItems.length < allCheckbox.length) {
         select_all_checkBox.indeterminate = true;
-    }
-    if (checkedItems.length === allCheckbox.length) {
+    } else if (checkedItems.length === allCheckbox.length) {
         select_all_checkBox.indeterminate = false;
         select_all_checkBox.checked = true;
+    } else {
+        select_all_checkBox.checked = false;
+        select_all_checkBox.indeterminate = false;
     }
+}
+
+function action_menu() {
+    let div = document.createElement('div');
+    div.className = 'action-div';
+    const html = `
+            <ul class='action-ul'>
+                <li id='approve'><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#000000"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                      <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                    Approve
+                </li>
+                <li id='decline'>
+                    <svg width="15px" height="15px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" version="1.1" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1">
+                    <path d="m10.25 5.75-4.5 4.5m0-4.5 4.5 4.5"/>
+                    <rect height="10.5" width="10.5" y="2.75" x="2.75"/>
+                    </svg>
+                    Decline
+                </li>
+            </ul>
+    `;
+    div.innerHTML = html;
+    return div;
+}
+
+
+// function Approve Decline Event
+
+function Action_Event() {
+    let currentOpenDiv = null;
+    document.querySelectorAll('.action').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            let parent = e.target.closest('td');
+            let div = action_menu();
+            let existing = parent.querySelector('.action-div');
+            if (currentOpenDiv) currentOpenDiv.remove();
+            if (!existing) {
+                parent.appendChild(div);
+                currentOpenDiv = div;
+                div.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                })
+            } else {
+                existing.remove();
+                currentOpenDiv = null;
+            }
+            let approve = document.querySelector('#approve');
+            let decline = document.querySelector('#decline');
+            if (approve) {
+                approve_decline(approve, 'Approved')
+            }
+            if (decline) {
+                approve_decline(decline, 'Declined')
+            }
+        });
+    });
+
+    // Event for Resetting action-div when clicked outside
+    document.addEventListener('click', (event) => {
+        if (currentOpenDiv && !currentOpenDiv.contains(event.target) && !event.target.closest('.action')) {
+            currentOpenDiv.remove();
+            currentOpenDiv = null;
+        }
+    });
+}
+
+function approve_decline(element, msg) {
+    element.addEventListener('click', (e) => {
+        let parent = e.target.closest('tr');
+        parent.querySelector('.status').setAttribute('data-status', msg);
+        parent.querySelector('.status').textContent = msg;
+
+        for (const item of data) {
+            if (item.id === Number(parent.id)) {
+                item.status = msg;
+            }
+        }
+        element.closest('.action-div').remove();
+    })
 }

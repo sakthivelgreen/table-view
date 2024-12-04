@@ -242,9 +242,14 @@ tr {
 
 .sticky.col-input {
     left: var(--overall-padding);
-    padding: var(--overall-padding)
+    padding: var(--overall-padding);
+    z-index: 2
 }
 
+.sticky.col-data,
+.sticky.col-title {
+    z-index: 3;
+}
 
 .col-title,
 .col-data {
@@ -256,11 +261,38 @@ tr {
     min-width: 50px;
 }
 
+/* for options menu*/
 .action {
-    /* for options menu*/
     font-size: 14px;
     cursor: pointer;
     padding: 0px 10px;
+    position: relative;
+}
+
+.action-div {
+    position: absolute;
+    background-color: #0f0f0f;
+    z-index: 10;
+    right: 100%;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.action-ul li svg {
+    stroke: var(--default-text-color);
+}
+
+.action-ul li {
+    list-style-type: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.action-ul li:hover {
+    background-color: var(--hover-color);
 }
 
 /* Status */
