@@ -1,3 +1,4 @@
+// for column freeze in Table
 document.addEventListener("DOMContentLoaded", function () {
     const firstColumn = document.querySelectorAll('.sticky.col-input');
     const secondColumn = document.querySelectorAll('.sticky.col-data');
@@ -14,17 +15,238 @@ document.addEventListener("DOMContentLoaded", function () {
     const cells = document.querySelectorAll('td:not(.sticky), th:not(.sticky)');
 
     tableContainer.addEventListener('scroll', () => {
-
         cells.forEach(cell => {
             const cellRect = cell.getBoundingClientRect();
-
             if (cellRect.left - tableContainer.getBoundingClientRect().left <= 50) {
                 cell.style.opacity = 0;
             } else {
                 cell.style.opacity = 1;
             }
-
         });
     });
-
 });
+
+// Declarations
+const table = document.querySelector('table');
+const thead = document.querySelector('thead');
+const tbody = document.querySelector('tbody');
+
+const data =
+    [
+        {
+            "id": 1024,
+            "img_src": "./static/60111.jpg",
+            "name": "Robert Fox",
+            "leave_type": "Annual Leave",
+            "date": "Sep 12 - Sep 16, 2024",
+            "duration": "5 days",
+            "status": "Pending"
+        },
+        {
+            "id": 1025,
+            "img_src": "./static/60111.jpg",
+            "name": "Arlene McCoy",
+            "leave_type": "Sick Leave",
+            "date": "Aug 2 - Aug 9, 2024",
+            "duration": "8 days",
+            "status": "Pending"
+        },
+        {
+            "id": 1026,
+            "img_src": "./static/60111.jpg",
+            "name": "Brooklyn Simmons",
+            "leave_type": "Annual Leave",
+            "date": "April 18 - April 21, 2024",
+            "duration": "4 days",
+            "status": "Pending"
+        },
+        {
+            "id": 1027,
+            "img_src": "./static/60111.jpg",
+            "name": "Darlene Robertson",
+            "leave_type": "Annual Leave",
+            "date": "April 1 - April 4, 2024",
+            "duration": "4 days",
+            "status": "Approved"
+        },
+        {
+            "id": 1028,
+            "img_src": "./static/60111.jpg",
+            "name": "Jacob Jones",
+            "leave_type": "Annual Leave",
+            "date": "Mar 6 - Mar 7, 2024",
+            "duration": "2 days",
+            "status": "Approved"
+        },
+        {
+            "id": 1029,
+            "img_src": "./static/60111.jpg",
+            "name": "Devon Lane",
+            "leave_type": "Annual Leave",
+            "date": "Feb 16 - Feb 18, 2024",
+            "duration": "3 days",
+            "status": "Declined"
+        },
+        {
+            "id": 1030,
+            "img_src": "./static/60111.jpg",
+            "name": "Kathryn Murphy",
+            "leave_type": "Sick Leave",
+            "date": "Feb 1 - Feb 4, 2024",
+            "duration": "4 days",
+            "status": "Pending"
+        },
+        {
+            "id": 1031,
+            "img_src": "./static/60111.jpg",
+            "name": "Ralph Edwards",
+            "leave_type": "Paternity Leave",
+            "date": "Dec 22 2023 - Jan 24, 2024",
+            "duration": "31 days",
+            "status": "Approved"
+        },
+
+        {
+            'id': 1110,
+            "img_src": "./static/60111.jpg",
+            "name": "John Doe",
+            "leave_type": "Sick Leave",
+            "date": "Dec 1 - Dec 7, 2024",
+            "duration": "7 days",
+            "status": "Approved"
+        },
+        {
+            'id': 1120,
+            "img_src": "./static/60111.jpg",
+            "name": "Emily Carter",
+            "leave_type": "Casual Leave",
+            "date": "Nov 20 - Nov 25, 2024",
+            "duration": "6 days",
+            "status": "Pending"
+        },
+        {
+            'id': 1140,
+            "img_src": "./static/60111.jpg",
+            "name": "Michael Brown",
+            "leave_type": "Earned Leave",
+            "date": "Dec 15 - Dec 30, 2024",
+            "duration": "16 days",
+            "status": "Approved"
+        },
+        {
+            'id': 1112,
+            "img_src": "./static/60111.jpg",
+            "name": "Sarah Lee",
+            "leave_type": "Maternity Leave",
+            "date": "Oct 1 - Dec 31, 2024",
+            "duration": "92 days",
+            "status": "Approved"
+        },
+        {
+            'id': 1230,
+            "img_src": "./static/60111.jpg",
+            "name": "David Johnson",
+            "leave_type": "Casual Leave",
+            "date": "Nov 10 - Nov 15, 2024",
+            "duration": "6 days",
+            "status": "Declined"
+        },
+        {
+            'id': 1234,
+            "img_src": "./static/60111.jpg",
+            "name": "Olivia Smith",
+            "leave_type": "Sick Leave",
+            "date": "Dec 3 - Dec 5, 2024",
+            "duration": "3 days",
+            "status": "Approved"
+        },
+        {
+            'id': 4321,
+            "img_src": "./static/60111.jpg",
+            "name": "Ethan Taylor",
+            "leave_type": "Casual Leave",
+            "date": "Nov 28 - Dec 2, 2024",
+            "duration": "5 days",
+            "status": "Pending"
+        },
+        {
+            'id': 8097,
+            "img_src": "./static/60111.jpg",
+            "name": "Sophia Martinez",
+            "leave_type": "Study Leave",
+            "date": "Nov 5 - Dec 5, 2024",
+            "duration": "31 days",
+            "status": "Approved"
+        },
+        {
+            'id': 1156,
+            "img_src": "./static/60111.jpg",
+            "name": "Liam Anderson",
+            "leave_type": "Casual Leave",
+            "date": "Nov 18 - Nov 21, 2024",
+            "duration": "4 days",
+            "status": "Declined"
+        },
+        {
+            'id': 1970,
+            "img_src": "./static/60111.jpg",
+            "name": "Ava Wilson",
+            "leave_type": "Parental Leave",
+            "date": "Nov 1 - Nov 30, 2024",
+            "duration": "30 days",
+            "status": "Approved"
+        }
+    ]
+
+function main() { // Logics Start here
+    data_Insert()
+}
+main() // function Call
+
+function data_Insert() {
+    thead.appendChild(row_thead());
+    data.forEach(item => {
+        tbody.appendChild(row(item.id, item.img_src, item.name, item.leave_type, item.date, item.duration, item.status))
+    });
+}
+
+function row(id, profile_img, name, leave_type, date, duration, status) {
+    const row = document.createElement('tr');
+    row.className = 'row';
+    const html = `
+    <td class="col-input sticky"><input type="checkbox"  id="${id}" /></td>
+    <td class="col-data sticky">
+        <span>
+            <img src="${profile_img}" alt="profile-img">
+            ${name}
+        </span>
+    </td>
+    <td class="col-data">${leave_type}</td>
+    <td class="col-data">${date}</td>
+    <td class="col-data">${duration}</td>
+    <td class="col-data">
+        <span class="status" data-status="${status}">
+            ${status}
+        </span>
+    </td>
+    <td class="action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+    `
+    row.innerHTML = html;
+    return row;
+}
+
+function row_thead() {
+    const row = document.createElement('tr');
+    const html = `
+    <th class="col-input sticky">
+        <input type="checkbox" name="select-all" id="select-all" />
+    </th>
+    <th class="col-title sticky">Employee</th>
+    <th class="col-title">Leave Type</th>
+    <th class="col-title">Date Requested</th>
+    <th class="col-title">Duration</th>
+    <th class="col-title">Status</th>
+    <th></th>`;
+    row.innerHTML = html;
+    return row;
+}
