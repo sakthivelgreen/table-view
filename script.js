@@ -183,9 +183,11 @@ function main() { // Logics Start here
 main() // function Call
 
 function data_Insert(obj) {
+    const fragment = document.createDocumentFragment();
     obj.forEach(item => {
-        tbody.appendChild(row(item.id, item.img_src, item.name, item.leave_type, item.date, item.duration, item.status))
+        fragment.appendChild(row(item.id, item.img_src, item.name, item.leave_type, item.date, item.duration, item.status));
     });
+    tbody.appendChild(fragment);
     freeze_columns();
     Action_Event()
     checkbox_Event()
@@ -245,6 +247,7 @@ function events() {
         let status_approved = data.filter(item => item.status === 'Approved');
         tbody.innerHTML = '';
         data_Insert(status_approved);
+        search.value = '';
 
     })
     leave_requests.addEventListener('click', (e) => {
@@ -252,9 +255,10 @@ function events() {
         e.target.classList.add('active');
         tbody.innerHTML = '';
         data_Insert(data);
+        search.value = '';
     })
 
-    search.addEventListener('input', () => {
+    search.addEventListener('keyup', () => {
         if (search.value.trim() !== '') {
             searchByName(search.value);
         }
@@ -305,12 +309,9 @@ function freeze_columns() {
 
 // Search using name
 function searchByName(search_string) {
-    const Employee_td = document.querySelectorAll('.Employee-name');
-    Employee_td.forEach(td => {
-        tbody.innerHTML = '';
-        let Emp_details = data.filter(item => item.name.trim().toLocaleLowerCase().includes(search_string.trim().toLocaleLowerCase()))
-        data_Insert(Emp_details);
-    })
+    let Emp_details = data.filter(item => item.name.trim().toLocaleLowerCase().includes(search_string.trim().toLocaleLowerCase()))
+    tbody.innerHTML = '';
+    data_Insert(Emp_details);
 }
 
 // CheckBox 
@@ -335,12 +336,12 @@ function checkBox(e) {
     }
 }
 
-function action_menu() {
+function action_menu(status) {
     let div = document.createElement('div');
     div.className = 'action-div';
     const html = `
             <ul class='action-ul'>
-                <li id='approve'><svg
+                <li id='approve' class="${status === 'Approved' ? 'active' : ''}"><svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="15"
                         height="15"
@@ -354,7 +355,7 @@ function action_menu() {
                     </svg>
                     Approve
                 </li>
-                <li id='decline'>
+                <li id='decline' class="${status === 'Declined' ? 'active' : ''}">
                     <svg width="15px" height="15px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" version="1.1" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1">
                     <path d="m10.25 5.75-4.5 4.5m0-4.5 4.5 4.5"/>
                     <rect height="10.5" width="10.5" y="2.75" x="2.75"/>
@@ -376,7 +377,7 @@ function Action_Event() {
         item.addEventListener('click', (e) => {
             e.stopPropagation();
             let parent = e.target.closest('td');
-            let div = action_menu();
+            let div = action_menu(parent.previousElementSibling.querySelector('.status').getAttribute('data-status'));
             let existing = parent.querySelector('.action-div');
             if (currentOpenDiv) currentOpenDiv.remove();
             if (!existing) {
@@ -412,6 +413,11 @@ function Action_Event() {
 function approve_decline(element, msg) {
     element.addEventListener('click', (e) => {
         let parent = e.target.closest('tr');
+        let active = parent.querySelector('.active');
+        if (active) {
+            active.classList.remove('active');
+        }
+        element.classList.add('active');
         parent.querySelector('.status').setAttribute('data-status', msg);
         parent.querySelector('.status').textContent = msg;
 
@@ -426,49 +432,13 @@ function approve_decline(element, msg) {
 
 // Switch Theme
 document.querySelector('#theme-switch-btn').addEventListener('click', (event) => {
-    let element = event.target;
-    let color;
-    let [dark_background, dark_text] = [getComputedStyle(root).getPropertyValue('--background-dark'), getComputedStyle(root).getPropertyValue('--color-dark')]
-    let [light_background, light_text] = [getComputedStyle(root).getPropertyValue('--background-light'), getComputedStyle(root).getPropertyValue('--color-light')]
-    let [container_background, hover_color] = [getComputedStyle(root).getPropertyValue('--container'), getComputedStyle(root).getPropertyValue('--hover-color')]
-    let background_accent = getComputedStyle(root).getPropertyValue('--background-color-accent1');
-    switch (element.className) {
-        case 'dark':
-            element.textContent = 'Switch Light';
-            element.className = 'light';
-            color = {
-                hover: '#E6E6E6',
-                background: light_background,
-                text: light_text,
-                accent: light_background,
-                container: light_background,
-            }
-            change_colors(color);
-            break;
-        case 'light':
-            element.textContent = 'Switch Dark';
-            element.className = 'dark';
-            color = {
-                hover: '#1F1F1F',
-                background: dark_background,
-                text: dark_text,
-                accent: background_accent,
-                container: container_background,
-            }
-            change_colors(color)
-            break;
-
-        default:
-            break;
+    let currentTheme = document.body.getAttribute('data-theme');
+    if (currentTheme === 'dark') {
+        document.body.setAttribute('data-theme', 'light');
+        event.target.textContent = 'Switch Dark';
+    } else {
+        document.body.setAttribute('data-theme', 'dark');
+        event.target.textContent = 'Switch Light';
     }
+});
 
-})
-
-function change_colors(color) {
-    root.style.setProperty('--overall-background', color.background);
-    root.style.setProperty('--default-text-color', color.text);
-    root.style.setProperty('--container-background', color.container);
-    root.style.setProperty('--text-color', color.text);
-    root.style.setProperty('--hover-color', color.hover)
-    root.style.setProperty('--background-color-accent1', color.accent)
-}
