@@ -2,6 +2,7 @@
 const table = document.querySelector('table');
 const thead = document.querySelector('thead');
 const tbody = document.querySelector('tbody');
+const root = document.documentElement;
 
 const leave_requests = document.querySelector('#leave-requests');
 const leave_approved = document.querySelector('#leave-approved');
@@ -421,4 +422,53 @@ function approve_decline(element, msg) {
         }
         element.closest('.action-div').remove();
     })
+}
+
+// Switch Theme
+document.querySelector('#theme-switch-btn').addEventListener('click', (event) => {
+    let element = event.target;
+    let color;
+    let [dark_background, dark_text] = [getComputedStyle(root).getPropertyValue('--background-dark'), getComputedStyle(root).getPropertyValue('--color-dark')]
+    let [light_background, light_text] = [getComputedStyle(root).getPropertyValue('--background-light'), getComputedStyle(root).getPropertyValue('--color-light')]
+    let [container_background, hover_color] = [getComputedStyle(root).getPropertyValue('--container'), getComputedStyle(root).getPropertyValue('--hover-color')]
+    let background_accent = getComputedStyle(root).getPropertyValue('--background-color-accent1');
+    switch (element.className) {
+        case 'dark':
+            element.textContent = 'Switch Light';
+            element.className = 'light';
+            color = {
+                hover: '#E6E6E6',
+                background: light_background,
+                text: light_text,
+                accent: light_background,
+                container: light_background,
+            }
+            change_colors(color);
+            break;
+        case 'light':
+            element.textContent = 'Switch Dark';
+            element.className = 'dark';
+            color = {
+                hover: '#1F1F1F',
+                background: dark_background,
+                text: dark_text,
+                accent: background_accent,
+                container: container_background,
+            }
+            change_colors(color)
+            break;
+
+        default:
+            break;
+    }
+
+})
+
+function change_colors(color) {
+    root.style.setProperty('--overall-background', color.background);
+    root.style.setProperty('--default-text-color', color.text);
+    root.style.setProperty('--container-background', color.container);
+    root.style.setProperty('--text-color', color.text);
+    root.style.setProperty('--hover-color', color.hover)
+    root.style.setProperty('--background-color-accent1', color.accent)
 }
