@@ -412,21 +412,23 @@ function Action_Event() {
 
 function approve_decline(element, msg) {
     element.addEventListener('click', (e) => {
-        let parent = e.target.closest('tr');
-        let active = parent.querySelector('.active');
-        if (active) {
-            active.classList.remove('active');
-        }
-        element.classList.add('active');
-        parent.querySelector('.status').setAttribute('data-status', msg);
-        parent.querySelector('.status').textContent = msg;
+        if (!e.target.classList.contains('active')) { // for preventing more than one clicks
+            let parent = e.target.closest('tr');
 
-        for (const item of data) {
-            if (item.id === Number(parent.id)) {
-                item.status = msg;
+            let active = parent.querySelector('.active');
+            if (active) active.classList.remove('active');
+
+            element.classList.add('active');
+            parent.querySelector('.status').setAttribute('data-status', msg);
+            parent.querySelector('.status').textContent = msg;
+
+            for (const item of data) {
+                if (item.id === Number(parent.id)) {
+                    item.status = msg;
+                }
             }
+            element.closest('.action-div').remove();
         }
-        element.closest('.action-div').remove();
     })
 }
 
